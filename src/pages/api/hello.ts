@@ -1,13 +1,16 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+// src/pages/api/hello.ts
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { withMetrics } from '@/lib/withMetrics';
 
 type Data = {
   name: string
 }
 
-export default function handler(
+function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  res.status(200).json({ name: 'Reddit Clone' })
 }
+
+export default withMetrics(handler);
