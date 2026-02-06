@@ -5,7 +5,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 withCredentials([
-                    file(credentialsId: 'nextjs-build-env', variable: 'ENV_FILE')
+                    file(credentialsId: 'firebase-config', variable: 'ENV_FILE')
                 ]) {
                     sh '''
                       echo "Loading env vars from secret file..."
