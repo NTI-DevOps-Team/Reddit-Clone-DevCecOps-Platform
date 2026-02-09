@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     AWS_REGION        = "us-east-1"
-    EKS_CLUSTER_NAME  = "my-eks"
+    EKS_CLUSTER_NAME  = "my-eks-cluster"
     ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo"
     IMAGE_TAG         = "${BUILD_NUMBER}"
     K8S_NAMESPACE     = "reddit"
