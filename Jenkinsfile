@@ -7,7 +7,7 @@ pipeline {
         IMAGE_TAG         = "${BUILD_NUMBER}"
          SONAR_PROJECT_KEY = "reddit-2"
         K8S_NAMESPACE     = "reddit"
-          GIT_REPO = "github.com/reda-sobhy/Reddit-Clone-End-to-End-DevSecOps-Platform.git"
+          GIT_REPO = "https://github.com/NTI-DevOps-Team/Reddit-K8s-Deployment.git"
         
     }
      
