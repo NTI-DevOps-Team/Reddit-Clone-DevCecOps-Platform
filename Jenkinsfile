@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_REGION        = "us-east-1"
         EKS_CLUSTER_NAME = "my-eks"
-          ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/redit"
+          ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo"
         IMAGE_TAG         = "${BUILD_NUMBER}"
          SONAR_PROJECT_KEY = "reddit-2"
         K8S_NAMESPACE     = "reddit"
@@ -45,25 +45,23 @@ pipeline {
 stage('OWASP Dependency Check') {
   steps {
     sh '''
-      # Create cache folder inside workspace
-      mkdir -p $WORKSPACE/.dependency-check
+      mkdir -p /var/jenkins_home/.dependency-check
+      mkdir -p /var/jenkins_home/reports
 
-      # Run OWASP Dependency Check in Docker container
       docker run --rm \
-        -v $WORKSPACE:/src \
-        -v $WORKSPACE:/report \
-        -v /home/abdul/nvd:/root/.dependency-check \
+        -v /var/jenkins_home/workspace/$JOB_NAME:/src \
+        -v /var/jenkins_home/reports:/report \
+        -v /var/jenkins_home/.dependency-check:/root/.dependency-check \
         owasp/dependency-check \
         --project reddit-app \
         --scan /src \
         --format XML \
-        --out /report \
-        
-
-      
+        --out /report
     '''
   }
 }
+
+
 
  stage('Build Docker Image') {
             steps {
@@ -139,7 +137,11 @@ stage('Push Image to ECR') {
 stage('Update Deployment Image') {
   steps {
     sh '''
-      sed -i "s|IMAGE_PLACEHOLDER|$ECR_REPO:$IMAGE_TAG|g" kubernetes/deployment.yaml
+
+     git clone https://github.com/NTI-DevOps-Team/Reddit-K8s-Deployment.git
+     
+      sed -i "s|^[[:space:]]*image:.*|    image: $ECR_REPO:$IMAGE_TAG|g" deployment.yaml
+
     '''
   }
 }
@@ -151,7 +153,7 @@ stage('Update Deployment Image') {
         git config user.email "jenkins@gmail.com"
         git config user.name "Jenkins CI"
 
-        git add kubernetes/deployment.yaml
+        git add deployment.yaml
         git diff --cached --quiet || git commit -m "Update image to $IMAGE_TAG"
 
         
@@ -168,22 +170,7 @@ stage('Update Deployment Image') {
 }
 
 
-       stage('Apply to EKS') {
-  steps {
-    withCredentials([[
-      $class: 'AmazonWebServicesCredentialsBinding',
-      credentialsId: 'aws-cred'
-    ]]) {
-      sh '''
-        aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
-
-        kubectl create ns reddit
-        kubectl apply -n reddit -f kubernetes/
- 
-      '''
-    }
-  }
-}
+       
 
     }
     post {
