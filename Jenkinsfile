@@ -17,7 +17,7 @@ pipeline {
         checkout scm
       }
     }
-/*
+
     stage('Build Docker Image') {
       steps {
         withCredentials([file(credentialsId: 'firebase-config', variable: 'ENV_FILE')]) {
@@ -73,7 +73,7 @@ pipeline {
         sh 'docker push $ECR_REPO:$IMAGE_TAG'
       }
     }
-*/
+
     stage('Update Deployment Image (GitOps)') {
       steps {
         sh '''
@@ -109,47 +109,14 @@ pipeline {
         }
       }
     }
-/*
-    stage('Deploy to EKS') {
-  steps {
-    withCredentials([[
-      $class: 'AmazonWebServicesCredentialsBinding',
-      credentialsId: 'aws-cred'
-    ]]) {
-      sh '''
-        # Use workspace-local kubeconfig (NO permission issues)
-        export KUBECONFIG=$WORKSPACE/kubeconfig
-
-        aws eks update-kubeconfig \
-          --region $AWS_REGION \
-          --name $EKS_CLUSTER_NAME \
-          --kubeconfig $KUBECONFIG
-
-        kubectl apply -f Reddit-K8s-Deployment/deployment.yaml -n $K8S_NAMESPACE
-      '''
-    }
-  }
-}
-
-
-
-    stage('Verify Rollout') {
-      steps {
-        sh '''
-          kubectl rollout status deployment/reddit-app -n $K8S_NAMESPACE
-          kubectl get pods -n $K8S_NAMESPACE
-        '''
-      }
-    }
-    */
   }
 
   post {
     success {
-      echo "🚀 Reddit app deployed successfully!"
+      echo "Pipeline successful"
     }
     failure {
-      echo "❌ Pipeline failed"
+      echo "Pipeline failed"
     }
   }
 }
