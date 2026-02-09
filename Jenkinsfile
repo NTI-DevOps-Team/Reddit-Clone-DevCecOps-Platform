@@ -5,7 +5,7 @@ pipeline {
         EKS_CLUSTER_NAME = "my-eks"
           ECR_REPO          = "734468801857.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo"
         IMAGE_TAG         = "${BUILD_NUMBER}"
-         SONAR_PROJECT_KEY = "reddit-2"
+         SONAR_PROJECT_KEY = "reddit-3"
         K8S_NAMESPACE     = "reddit"
           GIT_REPO = "https://github.com/NTI-DevOps-Team/Reddit-K8s-Deployment.git"
         
