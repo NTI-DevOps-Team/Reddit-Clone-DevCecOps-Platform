@@ -141,8 +141,9 @@ pipeline {
         '''
       }
     }
+    */
   }
-*/
+
   post {
     success {
       echo "🚀 Reddit app deployed successfully!"
