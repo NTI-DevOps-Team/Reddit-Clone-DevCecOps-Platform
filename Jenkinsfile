@@ -109,7 +109,7 @@ pipeline {
         }
       }
     }
-
+/*
     stage('Deploy to EKS') {
   steps {
     withCredentials([[
@@ -131,7 +131,7 @@ pipeline {
   }
 }
 
-/*
+
 
     stage('Verify Rollout') {
       steps {
