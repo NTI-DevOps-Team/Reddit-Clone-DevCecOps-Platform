@@ -86,6 +86,7 @@ pipeline {
                         --build-arg NEXT_PUBLIC_FIREBASE_APP_ID \
                         --build-arg NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID \
                         -t reddit-nextjs-app .
+                        docker tag  reddit-nextjs-app  $ECR_REPO:$IMAGE_TAG
                     '''
                 }
             }
