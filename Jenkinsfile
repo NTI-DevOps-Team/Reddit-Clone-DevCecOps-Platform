@@ -117,20 +117,20 @@ pipeline {
       credentialsId: 'aws-cred'
     ]]) {
       sh '''
-        # Ensure kube directory exists and is writable
-        mkdir -p $HOME/.kube
-        chmod 700 $HOME/.kube
+        # Use workspace-local kubeconfig (NO permission issues)
+        export KUBECONFIG=$WORKSPACE/kubeconfig
 
         aws eks update-kubeconfig \
           --region $AWS_REGION \
           --name $EKS_CLUSTER_NAME \
-          --kubeconfig $HOME/.kube/config
+          --kubeconfig $KUBECONFIG
 
         kubectl apply -f Reddit-K8s-Deployment/deployment.yaml -n $K8S_NAMESPACE
       '''
     }
   }
 }
+
 
 
     stage('Verify Rollout') {
