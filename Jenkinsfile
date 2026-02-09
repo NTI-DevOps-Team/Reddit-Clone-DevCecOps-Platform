@@ -131,7 +131,7 @@ pipeline {
   }
 }
 
-
+/*
 
     stage('Verify Rollout') {
       steps {
@@ -142,7 +142,7 @@ pipeline {
       }
     }
   }
-
+*/
   post {
     success {
       echo "🚀 Reddit app deployed successfully!"
